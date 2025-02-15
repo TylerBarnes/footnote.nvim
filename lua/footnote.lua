@@ -113,7 +113,9 @@ function M.new_footnote()
     local num = string.match(buffer[row], '%d+')
     -- vim.notify(vim.inspect { num = num, row = row })
     -- TODO: add multi references support
-    for i, line in ipairs(buffer) do
+    -- for i, line in ipairs(buffer) do
+    for i = #buffer, 1, -1 do
+      local line = buffer[i]
       if i >= row then
         goto continue
       end

@@ -92,7 +92,7 @@ function M.new_footnote()
   -- )
   if word_end_ref ~= nil and is_footnote ~= true then
     -- local num = tonumber(string.sub(word_end_ref, 3, -2))
-    for i = #buffer, 1, -1 do
+    for i = 1, #buffer, 1 do
       if i <= row then
         goto continue
       end
@@ -111,16 +111,22 @@ function M.new_footnote()
     return
   elseif string.match(buffer[row], '^%[%d+]') then
     local num = string.match(buffer[row], '%d+')
-    -- vim.notify(vim.inspect { num = num })
+    -- vim.notify(vim.inspect { num = num, row = row })
     -- TODO: add multi references support
     for i, line in ipairs(buffer) do
       if i >= row then
         goto continue
       end
+      local line_is_footnote = string.match(line, '^%[' .. num .. ']') ~= nil
+      if line_is_footnote == true then
+        goto continue
+      end
+
       local match = string.find(line, '%[' .. num .. ']')
       if match ~= nil then
         -- vim.notify(vim.inspect(match))
-        -- vim.notify 'jump back?'
+        -- vim.notify 'jump back'
+        vim.cmd "normal! m'" -- Set the jumplist mark at current position
         vim.api.nvim_win_set_cursor(0, { i, match + 1 })
         return
       end

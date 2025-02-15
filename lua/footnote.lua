@@ -121,7 +121,8 @@ function M.new_footnote()
       end
       local line_is_footnote = string.match(line, '^%[' .. num .. ']') ~= nil
       if line_is_footnote == true then
-        goto continue
+        -- if we go up and find another footnote with the same number there's no match
+        break
       end
 
       local match = string.find(line, '%[' .. num .. ']')
